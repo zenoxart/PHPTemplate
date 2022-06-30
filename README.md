@@ -1,8 +1,11 @@
 # Themenkatalog Applikationsentwickler - Coding Lehre
 
+
 Ausgearbeitet von:
 Daniel Kasper
 Voestalpine | Applikationsentwickler-Lehrling 
+
+Downloade diese File und öffne sie im Browser mit einer Markdown-Viewer-Browser-Extension
 
 
 # 1. Grundlagen in der Informationstechnik
