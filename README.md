@@ -5,7 +5,8 @@ Ausgearbeitet von:
 Daniel Kasper
 Voestalpine | Applikationsentwickler-Lehrling 
 
-Downloade diese File und öffne sie im Browser mit einer Markdown-Viewer-Browser-Extension
+Um die Base64-Bilder im Dokument zu sehen, downloade Typora und nutz die 15 Tage Test-Version:
+Link zu Typora: typora.io/windows/typora-setup-x64.exe
 
 
 # 1. Grundlagen in der Informationstechnik
