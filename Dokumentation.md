@@ -8,8 +8,6 @@ Projekt-Themplate: https://github.com/zenoxart/PHPTemplate
 
 
 
-PHP-Info 
-
 
 ## Verwendete Tools:
 - BACKEND:                PHP 8.0.8 / Windows 10
@@ -17,7 +15,7 @@ PHP-Info
 - DATABASE:               MariaDB 10.4.21
 - DBMS:                   MySQL Workbench 8.0.29
 
-TABNINE
+TABNINE AI Extension for VS CODE
 
 
 
