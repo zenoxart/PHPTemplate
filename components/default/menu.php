@@ -3,7 +3,7 @@
   <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme py-3">
     <div class="app-brand demo">
       <a href="index.php" class="app-brand-link">
-        <span class="app-brand-text menu-text fw-bolder ms-2">Sneat</span>
+        <span class="app-brand-text menu-text fw-bolder ms-2">My App</span>
       </a>
 
       <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -25,7 +25,7 @@
       <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
 
-          <i class='menu-icon tf-icons bx bx-building-house'></i>
+          <i class='menu-icon tf-icons bx bx-folder'></i>
           <div data-i18n="Layouts">Verwaltung</div>
         </a>
 
@@ -38,7 +38,9 @@
 
         </ul>
       </li>
+
   </aside>
+  
 
  
   <!-- / Menu -->

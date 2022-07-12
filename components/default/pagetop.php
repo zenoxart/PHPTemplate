@@ -3,14 +3,15 @@
 <!-- =========================================================
 * Daniel Kasper
 * Application-Developer Coding
-* 2022.05.25
-* Template based on
-* Sneat - Bootstrap 5 HTML Admin Template - Demo | v1.0.0
+* 2022.07.12
+* Template based on 
+* Sneat - Bootstrap 5 HTML Admin Template - Free | v1.0.0
 ==============================================================
 
+* Theme-Information:
 * Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
 * Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
+* License: MIT License
 * Copyright ThemeSelection (https://themeselection.com)
 
 =========================================================

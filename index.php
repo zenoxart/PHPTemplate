@@ -62,8 +62,7 @@
             </a>
 
             <p class="mb-1">
-              Umgesetzt mit der Version <?php echo getMySqlVersion(); ?> <br>
-              Local-Hosting mit XAMPP 3.3.0
+              Umgesetzt mit der Version <?php echo getMySqlVersion(); ?>
             </p>
 
 
@@ -86,9 +85,27 @@
             </a>
 
             <p class="mb-1">
-              Umgesetzt mit der Bootstrap-Version Sneat Admin Dashboard 1.0.0
+              Umgesetzt mit der kostenlosen Bootstrap-Version "Sneat Admin Dashboard 1.0.0"
             </p>
 
+
+          </div>
+        </div>
+      </div>
+    </div>
+ <!-- Environmentvariablen-Card -->
+    <div class="row mt-4">
+      <div class="col-lg-12 mb-4 order-0">
+        <div class="card">
+          <div class="card-body">
+
+            <a class="menu-link card-title mb-2">
+              <i class="menu-icon tf-icons bx bx-data text-primary"></i>
+              <div style="display: flex;align-items: center;">
+                <h5 class="text-primary" style="margin: auto;">Environmentvariablen</h5>
+              </div>
+            </a>
+            <a href="info.php" class="btn btn-primary">Zur den PHP-Infos</a>
 
           </div>
         </div>

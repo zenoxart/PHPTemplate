@@ -1,129 +1,164 @@
 <?php
 
+// Einbindung der Datenbank-Verbindung und der Kern-Funktion makeStatement
 include("connection.php");
 
+// Erstellt eine Tabelle mit Selectionsmöglichkeit aus der angegebenen query/procedure
 function makeTableSelect($query, $radioName = "rad", $array = null,)
 {
+    // Führt das Prepared Statement aus
     $stmt = makeStatement($query, $array);
 
-    echo '<div class="table-responsive text-nowrap">';
-    echo ' <table class="table table-striped">';
-    $meta = array();
-    for ($i = 0; $i < $stmt->columnCount(); $i++) {
-        $meta[] = $stmt->getColumnMeta($i);
-        echo '<th>' . $meta[$i]['name'] . '</th>';
-    }
-    echo '
-    <tbody class="table-border-bottom-0">';
+    // verhindert eine null-pointer-exception
+    if ($stmt != null) {
+        echo '<div class="table-responsive text-nowrap">';
+        echo ' <table class="table table-striped">';
 
+        // Erstellt aus den Meta-Daten den Header der Tabelle 
+        $meta = array();
+        for ($i = 0; $i < $stmt->columnCount(); $i++) {
+            $meta[] = $stmt->getColumnMeta($i);
+            echo '<th>' . $meta[$i]['name'] . '</th>';
+        }
+        echo '<tbody class="table-border-bottom-0">';
 
-    while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-        echo '<tr>';
-        foreach ($row as $r) {
-            echo '<td>' . $r . '</td>';
+        // Für jede Zeile in der Datenbank-Response
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            echo '<tr>';
+            // Für jedes Element in der Zeile
+            foreach ($row as $r) {
+                echo '<td>' . $r . '</td>';
+            }
+
+            // Erstellt einen Radio-Button zum auswählen
+            echo '<td>.<input type="radio" name="' . $radioName . '" value="' . $row[0] . '"> </td>';
+
+            echo '</tr>';
         }
 
-        echo '<td>.<input type="radio" name="' . $radioName . '" value="' . $row[0] . '"> </td>';
-
-        echo '</tr>';
+        echo "</tbody></table></div>";
     }
-
-    echo "</tbody></table></div>";
 
     return $stmt;
 }
 
+// Erstellt eine Tabelle mit Selectionsmöglichkeit & optionalem Zeilen-Highlighing aus der angegebenen query/procedure
 function makeTableSelectHightlightId($query, $radioName = "rad", $id = -1, $array = null)
 {
+    // Führt das Prepared Statement aus
     $stmt = makeStatement($query, $array);
 
-    echo '<div class="table-responsive text-nowrap">';
-    echo ' <table class="table table-striped">';
-    $meta = array();
-    for ($i = 0; $i < $stmt->columnCount(); $i++) {
-        $meta[] = $stmt->getColumnMeta($i);
-        echo '<th>' . $meta[$i]['name'] . '</th>';
-    }
-    echo '
-    <tbody class="table-border-bottom-0">';
+    // verhindert eine null-pointer-exception
+    if ($stmt != null) {
+
+        echo '<div class="table-responsive text-nowrap">';
+        echo ' <table class="table table-striped">';
+
+        // Erstellt aus den Meta-Daten den Header der Tabelle 
+        $meta = array();
+        for ($i = 0; $i < $stmt->columnCount(); $i++) {
+            $meta[] = $stmt->getColumnMeta($i);
+            echo '<th>' . $meta[$i]['name'] . '</th>';
+        }
+        echo '<tbody class="table-border-bottom-0">';
 
 
-    while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-        if ($row[0] == $id) {
-            echo '<tr class="table-danger">';
-        } else {
-            echo '<tr>';
+        // Für jede Zeile in der Datenbank-Response
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            if ($row[0] == $id) {
+                echo '<tr class="table-danger">';
+            } else {
+                echo '<tr>';
+            }
+
+            // Für jedes Element in der Zeile
+            foreach ($row as $r) {
+                echo '<td>' . $r . '</td>';
+            }
+
+            echo '<td>.<input type="radio" name="' . $radioName . '" value="' . $row[0] . '"> </td>';
+
+            echo '</tr>';
         }
 
-        foreach ($row as $r) {
-            echo '<td>' . $r . '</td>';
-        }
-
-        echo '<td>.<input type="radio" name="' . $radioName . '" value="' . $row[0] . '"> </td>';
-
-        echo '</tr>';
+        echo "</tbody></table></div>";
     }
-
-    echo "</tbody></table></div>";
 
     return $stmt;
 }
 
+// Erstellt einen Tabelle aus der angegebenen query/procedure 
 function makeTable($query, $array = null)
 {
+    // Führt das Prepared Statement aus
     $stmt = makeStatement($query, $array);
 
     $darstellung = "";
 
     if ($stmt != null) {
-        $darstellung = $darstellung. '<div class="table-responsive text-nowrap">';
-        $darstellung = $darstellung.  ' <table class="table table-striped">';
+        $darstellung = $darstellung . '<div class="table-responsive text-nowrap">';
+        $darstellung = $darstellung .  ' <table class="table table-striped">';
         $meta = array();
 
 
         for ($i = 0; $i < $stmt->columnCount(); $i++) {
             $meta[] = $stmt->getColumnMeta($i);
-            $darstellung = $darstellung.  '<th>' . $meta[$i]['name'] . '</th>';
+            $darstellung = $darstellung .  '<th>' . $meta[$i]['name'] . '</th>';
         }
-        $darstellung = $darstellung.  '<tbody class="table-border-bottom-0">';
+        $darstellung = $darstellung .  '<tbody class="table-border-bottom-0">';
 
         $counter = 0;
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $darstellung = $darstellung.  '<tr>';
+            $darstellung = $darstellung .  '<tr>';
             foreach ($row as $r) {
-                $darstellung = $darstellung.  '<td>' . $r . '</td>';
+                $darstellung = $darstellung .  '<td>' . $r . '</td>';
             }
-            $darstellung = $darstellung.  '</tr>';
+            $darstellung = $darstellung .  '</tr>';
             $counter++;
         }
 
-        $darstellung = $darstellung.  "</tbody></table></div>";
-        if ($counter == 0 ){
+        $darstellung = $darstellung .  "</tbody></table></div>";
+        if ($counter == 0) {
             echo "<tr> <td> KEIN Datensatz vorhanden ! </td> </tr>";
-        }else{
+        } else {
             echo $darstellung;
         }
-
-
     }
 
 
     return $stmt;
 }
 
-function singleElement($stmt)
+// Erstellt ein Select aus der angegebenen query/procedure
+function makeSelect($name, $query, $array = null)
 {
 
-    $last = null;
-    while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-        $last = $row[0];
-    }
+    // Führt das Prepared Statement aus
+    $stmt = makeStatement($query, $array);
 
-    return $last;
+    if ($stmt != null) {
+
+        $darstellung = '<select name="' . $name . '" class="form-select">';
+
+        $counter = 0;
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+
+
+            $darstellung = $darstellung . ' <option value="' . $row[0] . '">' . $row[1] . '</option>';
+
+            $counter++;
+        }
+
+
+        $darstellung = $darstellung . '</select>';
+        echo $darstellung;
+    }
 }
 
+// Erstellt eine Tabelle mit optionalem Zeilen-Highlighing aus der angegebenen query/procedure
 function makeTableHighlightId($query, $id = -1, $array = null)
 {
+    // Führt das Prepared Statement aus
     $stmt = makeStatement($query, $array);
 
     echo '<div class="table-responsive text-nowrap">';
@@ -162,8 +197,10 @@ function makeTableHighlightId($query, $id = -1, $array = null)
     return $stmt;
 }
 
+// Erstellt eine Liste aus der angegebenen query/procedure
 function makeList($query, $array = null)
 {
+    // Führt das Prepared Statement aus
     $stmt = makeStatement($query, $array);
 
     echo '<div class="list-group list-group-flush">';
@@ -178,6 +215,7 @@ function makeList($query, $array = null)
     return $stmt;
 }
 
+// Erstellt eine Carousel-Ansicht aus einem Array an Bilder-Namen und dem übergebenen Root-Pfad
 function makeCarousel($pics = [], $picroot = "../")
 {
 
@@ -219,8 +257,25 @@ function makeCarousel($pics = [], $picroot = "../")
             </div>';
 }
 
+// Gibt die Datenbank-Version zurück
 function getMySqlVersion()
 {
     $sql = "SELECT VERSION();";
     return singleElement(makeStatement($sql));
+}
+
+
+// Gib ein einzelnes Element aus dem Statement zurück
+function singleElement($stmt)
+{
+    $last = null;
+
+    // verhindert eine null-pointer-exception
+    if ($stmt != null) {
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $last = $row[0];
+        }
+    }
+
+    return $last;
 }
