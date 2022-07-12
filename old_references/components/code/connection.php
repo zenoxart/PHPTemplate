@@ -33,19 +33,6 @@ function makeStatement($query, $array = null){
     
 }
 
-function makeProcedure($procedure){
-    try {
-        
-        global $con;
-        $stmt = $con->query("CALL ".$procedure);
-
-        
-        $stmt->execute();
-        return $stmt;
-    } catch (Exception $e) {
-        echo "Ein fehler ist aufgetreten:".$e;
-    }
-}
 
 
 ?>

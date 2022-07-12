@@ -95,21 +95,26 @@ function makeTable($query, $array = null)
 
     $darstellung = "";
 
+    // verhindert eine null-pointer-exception
     if ($stmt != null) {
         $darstellung = $darstellung . '<div class="table-responsive text-nowrap">';
         $darstellung = $darstellung .  ' <table class="table table-striped">';
+
+        // Erstellt aus den Meta-Daten den Header der Tabelle 
         $meta = array();
-
-
         for ($i = 0; $i < $stmt->columnCount(); $i++) {
             $meta[] = $stmt->getColumnMeta($i);
             $darstellung = $darstellung .  '<th>' . $meta[$i]['name'] . '</th>';
         }
+
         $darstellung = $darstellung .  '<tbody class="table-border-bottom-0">';
 
         $counter = 0;
+
+        // Für jede Zeile in der Datenbank-Response
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
             $darstellung = $darstellung .  '<tr>';
+            // Für jedes Element in der Zeile
             foreach ($row as $r) {
                 $darstellung = $darstellung .  '<td>' . $r . '</td>';
             }
@@ -118,6 +123,7 @@ function makeTable($query, $array = null)
         }
 
         $darstellung = $darstellung .  "</tbody></table></div>";
+        // Prüfen ob überhaupt ein Datensatz vorhanden ist, ansonst Fehlernachricht
         if ($counter == 0) {
             echo "<tr> <td> KEIN Datensatz vorhanden ! </td> </tr>";
         } else {
@@ -136,17 +142,24 @@ function makeSelect($name, $query, $array = null)
     // Führt das Prepared Statement aus
     $stmt = makeStatement($query, $array);
 
+    // verhindert eine null-pointer-exception
     if ($stmt != null) {
 
         $darstellung = '<select name="' . $name . '" class="form-select">';
 
         $counter = 0;
+        // Für jede Zeile in der Datenbank-Response
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 
 
             $darstellung = $darstellung . ' <option value="' . $row[0] . '">' . $row[1] . '</option>';
 
             $counter++;
+        }
+
+        if($counter < 1) { 
+            
+            $darstellung = $darstellung . ' <option >Keine Werte Vorhanden!</option>';
         }
 
 
@@ -161,39 +174,45 @@ function makeTableHighlightId($query, $id = -1, $array = null)
     // Führt das Prepared Statement aus
     $stmt = makeStatement($query, $array);
 
-    echo '<div class="table-responsive text-nowrap">';
-    echo ' <table class="table table-striped">';
-    $meta = array();
-    for ($i = 0; $i < $stmt->columnCount(); $i++) {
-        $meta[] = $stmt->getColumnMeta($i);
-        echo '<th>' . $meta[$i]['name'] . '</th>';
-    }
-    echo '<tbody class="table-border-bottom-0">';
+    if ($stmt != null) {
 
+        echo '<div class="table-responsive text-nowrap">';
+        echo ' <table class="table table-striped">';
 
-    while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-
-        if ($row[0] == $id) {
-            echo '<tr class="table-danger">';
-        } else {
-            echo '<tr>';
+        // Erstellt aus den Meta-Daten den Header der Tabelle 
+        $meta = array();
+        for ($i = 0; $i < $stmt->columnCount(); $i++) {
+            $meta[] = $stmt->getColumnMeta($i);
+            echo '<th>' . $meta[$i]['name'] . '</th>';
         }
-        foreach ($row as $r) {
-            echo '<td>' . $r . '</td>';
+        echo '<tbody class="table-border-bottom-0">';
+
+
+        // Für jede Zeile in der Datenbank-Response
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+
+            if ($row[0] == $id) {
+                echo '<tr class="table-danger">';
+            } else {
+                echo '<tr>';
+            }
+            // Für jedes Element in der Zeile
+            foreach ($row as $r) {
+                echo '<td>' . $r . '</td>';
+            }
+            echo '</tr>';
         }
-        echo '</tr>';
+
+        if ($id == null || $id == -1) {
+
+            echo '<div style="margin:5pt" class="alert alert-danger alert-dismissible" role="alert">
+                    Wert existiert bereits, oder konnte nicht eingefügt werden 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                 </div>';
+        }
+
+        echo "</tbody></table></div>";
     }
-
-    if ($id == null || $id == -1) {
-
-        echo '<div style="margin:5pt" class="alert alert-danger alert-dismissible" role="alert">
-        Wert existiert bereits, oder konnte nicht eingefügt werden 
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>';
-    }
-
-    echo "</tbody></table></div>";
-
     return $stmt;
 }
 
@@ -205,7 +224,9 @@ function makeList($query, $array = null)
 
     echo '<div class="list-group list-group-flush">';
 
+    // checkt ob Werte vorhanden sind
     if ($stmt->rowCount() > 0) {
+        // Für jede Zeile in der Datenbank-Response
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
             echo '<a  class="list-group-item list-group-item-action">' . $row[0] . '</a>';
         }
@@ -224,7 +245,10 @@ function makeCarousel($pics = [], $picroot = "../")
     echo '<ol class="carousel-indicators">';
 
     $SlideCounter = 0;
+
+    // Für jeden Bild-Namen im Array
     while ($SlideCounter < count($pics)) {
+        // Dem Carousel die Slider-Id/Counter zuweisen
         echo '<li data-bs-target="#carouselExample" data-bs-slide-to="' . $SlideCounter . '"></li>';
 
         $SlideCounter += 1;
@@ -237,6 +261,7 @@ function makeCarousel($pics = [], $picroot = "../")
     $SlideCounter = 0;
     while ($SlideCounter < count($pics)) {
         echo '<div class="carousel-item">';
+        // Dateipfad zusammenbauen 
         echo '<img class="d-block w-100" src="' . $picroot . "" . $pics[$SlideCounter] . '" alt="Slide" />';
 
         echo '</div>';
@@ -260,19 +285,26 @@ function makeCarousel($pics = [], $picroot = "../")
 // Gibt die Datenbank-Version zurück
 function getMySqlVersion()
 {
+    
     $sql = "SELECT VERSION();";
+
+    // Holt die Datenbank-Version mit einem Statement und gibt ein einzelnes Element zurück
     return singleElement(makeStatement($sql));
 }
 
 
 // Gib ein einzelnes Element aus dem Statement zurück
+// NOTICE: Wenn mehr als 1 Wert zurück-kommen sollte wird nur der letze Wert zurück gegeben.
 function singleElement($stmt)
 {
     $last = null;
 
     // verhindert eine null-pointer-exception
     if ($stmt != null) {
+
+        // Für jede Zeile in der Datenbank-Response
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            // Nimm nur das Element in der ersten Spalte
             $last = $row[0];
         }
     }
